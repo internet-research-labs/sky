@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>everything feels really small</title>
+    <style>
+    #you-know {
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: rgb(255, 68, 112);
+      width: 100%;
+      height: 100%;
+    }
+
+    #dont-touch-me {
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    #okok {
+      z-index:10;
+      position: absolute;
+      color: white;
+      bottom: 1em;
+      left: 1em;
+      display: inline-block;
+      background-color: rgb(255, 68, 112);
+      line-height: 1.4em;
+      font-family: sans-serif;
+      padding: 0.25em 0.40em;
+      letter-spacing: 0.125em;
+    }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/99/three.js"></script>
+    <script src="/vendor/dat.gui.min.js"></script>
+    <script src="/vendor/stats.min.js"></script>
+    <script src="/vendor/OBJLoader.js"></script>
+    <script src="/assets/skv.im.bundled.min.js"></script>
+  </head>
+  <body>
+    <div id="stats"></div>
+    <div id="you-know">
+<div id="okok">TBD</div>
+<!--
+all the lights in the sky are stars
+i guess we all can be trying to think a little clearer
+but it feels good when we're around
+fuck we'll try again tomorrow
+and after all that I think i finally rested well
+-->
+      <canvas id="dont-touch-me"></canvas></div>
+
+    <script>
+
+    function datGui() {
+      grassParams = {
+        theta: Math.PI,
+        color: "#202824",
+        emissive: "#000000",
+        specular: "#18163C",
+        shininess: 1.6,
+        reflectivity: 0,
+        "y": 17,
+      };
+
+      sunParams = {
+        rayleigh: 4.0,
+        turbidity: 4.9,
+        mieDirectionalG: 0.1,
+        mieCoefficient: 0.1,
+        luminance: 1.0,
+      };
+
+      var gui = new dat.GUI({load: JSON});
+
+      var sunFolder = gui.addFolder("SUN SUN SUN");
+      sunFolder.add(sunParams, "rayleigh", 0., 6.0).onChange(update);
+      sunFolder.add(sunParams, "turbidity", 0., 6.0).onChange(update);
+      sunFolder.add(sunParams, "mieDirectionalG", 0., 6.0).onChange(update);
+      sunFolder.add(sunParams, "mieCoefficient", 0., 6.0).onChange(update);
+      sunFolder.add(sunParams, "luminance", 0, 3.).onChange(update);
+      sunFolder.open();
+
+      gui.remember(grassParams);
+
+
+      return grassParams;
+    }
+
+    var app = new skv.StarfieldApp({
+      id: "dont-touch-me",
+    });
+
+
+    window.addEventListener('load', function (ev) {
+
+      var grassParams = datGui();
+      
+      app.setup();
+      app.update(grassParams);
+      app.draw();
+
+      var stats = new Stats();
+      document.getElementById("stats").appendChild(stats.dom);
+
+      (function loloop() {
+        stats.begin();
+        app.update(grassParams);
+        app.draw();
+        stats.end();
+        requestAnimationFrame(loloop);
+      }());
+
+      window.addEventListener('resize', debounce(100, function (ev) {
+        app.resize(window.innerWidth, window.innerHeight);
+      }));
+
+      // Hoisting
+
+      function debounce(delay, f) {
+        var id = null;
+        return function () {
+          var self = this;
+          var args = arguments;
+          clearTimeout(id);
+          id = setTimeout(function () {
+            f.apply(self, args);
+          }, delay);
+        }
+      }
+
+    });
+
+    function update() {
+      // app.setPhong(grassParams);
+      // app.setTheta(grassParams.theta);
+      app.set(sunParams);
+    }
+
+    </script>
+  </body>
+</html>

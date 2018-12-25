@@ -1,0 +1,35 @@
+{
+  "name": "skv",
+  "version": "0.0.420",
+  "description": "and those that rushes my clutches get put on crutches - get smoked like dutches.",
+  "main": "index.js",
+  "scripts": {
+    "ayy": "node ./node_modules/webpack/bin/webpack.js -p",
+    "livest": "node ./node_modules/webpack/bin/webpack.js --watch --progresswebpack",
+    "lmao": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base=app/ --inline --hot",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whatever/skv.git"
+  },
+  "keywords": [
+    "grass"
+  ],
+  "author": "Matt Owen",
+  "license": "MIT",
+  "homepage": "http://illi.lt",
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "babel-loader": "^8.0.4",
+    "webpack": "^4.26.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10",
+    "webpack-glsl-loader": "^1.0.1"
+  },
+  "dependencies": {
+    "npm": "^6.4.1",
+    "simplex-noise": "^2.4.0"
+  }
+}
