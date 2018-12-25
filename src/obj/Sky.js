@@ -22,6 +22,7 @@ function _dir([x, y, z], c) {
   return new THREE.Line(g, m);
 }
 
+
 // Return a global at [x, y, z] of color {{c}} size {{size}}
 function _globe([x, y, z], c, size) {
   size = size || 0.1;
@@ -161,6 +162,8 @@ export class Sky {
     this.params = {
       'rot': 0.0,
     };
+
+    this.ambientLight = new THREE.AmbientLight(0xCCCCCC);
   }
 
   geometry() {

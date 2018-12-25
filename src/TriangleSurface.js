@@ -50,6 +50,10 @@ export default class TriangleSurface {
       }
     }
 
+    geo.computeVertexNormals();
+    geo.receiveShadow = true;
+    geo.castShadow = true;
+
     return geo;
   }
 }

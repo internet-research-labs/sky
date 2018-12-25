@@ -54,6 +54,18 @@ export default class StarfieldApp extends QuentinLike {
       antialias : true,
       canvas: this.el,
     });
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.BasicShadowMap;
+
+    /*
+    this.renderer.shadowCameraNear = 3;
+    this.renderer.shadowCameraFar = 9000;
+    this.renderer.shadowCameraFov = 50;
+    this.renderer.shadowMapBias = 0.0039;
+    this.renderer.shadowMapDarkness = 0.5;
+    this.renderer.shadowMapWidth = 1024;
+    this.renderer.shadowMapHeight = 1024;
+    */
 
     // Scene
     this.scene = new THREE.Scene();
@@ -67,23 +79,6 @@ export default class StarfieldApp extends QuentinLike {
     );
 
     // Lights
-    this.ambientLight = new THREE.AmbientLight(0xCCCCCC);
-    this.directionalLight = new THREE.DirectionalLight(0x333333, 0.5);
-    this.pointLight1 = new THREE.PointLight(0x333333, 2, 800);
-    this.pointLight2 = new THREE.PointLight(0x333333, 2, 800);
-
-    this.directionalLight.position.set(0, 0, -1);
-    this.pointLight1.position.set(0, 10, -10);
-    this.pointLight2.position.set(0, 10, -10);
-
-    this.directionalLight.lookAt(new THREE.Vector3(0, 0, 0));
-    this.pointLight1.lookAt(new THREE.Vector3(0, 0, 0));
-    this.pointLight2.lookAt(new THREE.Vector3(0, 0, 0));
-
-    this.scene.add(this.directionalLight);
-    this.scene.add(this.pointLight1);
-    this.scene.add(this.pointLight2);
-    this.scene.add(this.ambientLight);
 
     this.renderer.setSize(this.width, this.height);
     this.renderer.setPixelRatio(1.2);
@@ -94,7 +89,14 @@ export default class StarfieldApp extends QuentinLike {
     this.scene.add(this.sky.sky);
     this.sky.simulacrum.group.position.set(0, 2, 5);
     this.scene.add(this.sky.simulacrum.group);
-    this.setTheta(0.0);
+
+    this.scene.add(this.sky.ambientLight);
+    // this.scene.add(this.sky.directionalLight);
+    this.scene.add(this.sky.pointLight1);
+    // this.scene.add(this.sky.pointLight2);
+
+    let helper = new THREE.CameraHelper(this.sky.directionalLight.shadow.camera);
+    this.scene.add(helper);
 
     // Add visible components
 
@@ -129,13 +131,18 @@ export default class StarfieldApp extends QuentinLike {
           continue;
         }
         let x = i*(WIDTH+PAD);
+        let y = 0.0;
         let z = 60.0+j*(WIDTH+PAD);
-        let h = random(4.0, 10.0);
-        builder.addBuilding(x, z, {
-          width: WIDTH,
-          height: h,
-          depth: WIDTH,
-        });
+        let h = random(2.0, 8.0);
+
+        builder.addBuilding(
+          x, y, z,
+          {
+            width: WIDTH,
+            height: h,
+            depth: WIDTH,
+          },
+        );
       }
     }
     this.scene.add(builder.group);
@@ -271,14 +278,21 @@ export default class StarfieldApp extends QuentinLike {
       color: 0xCCCCCC,
       // envMap: this.cubeCamera.renderTarget,
       reflectivity: 0.95,
-      side: THREE.BackSide,
+      side: THREE.DoubleSide,
     });
 
-    // let geo = this.floor.getMesh();
+    let surface = new THREE.PlaneGeometry(100, 100, 100);
+    let obj = new THREE.Mesh(surface, mat);
+    obj.position.set(0, 0, 40);
+    obj.rotation.x = Math.PI/2.0;
+    obj.receiveShadow = true;
+    this.scene.add(obj);
+    //*/
 
+    /*
     let surface = new TriangleSurface(this.floor.f, 1, 90, 90);
-
-    this.scene.add(new THREE.Mesh(surface.build(), floorMat));
+    this.scene.add(new THREE.Mesh(surface.build(), mat));
+    //*/
   }
 
   addObelisk([x, z], c) {

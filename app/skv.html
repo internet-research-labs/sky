@@ -71,7 +71,7 @@ and after all that I think i finally rested well
         mieDirectionalG: 0.1,
         mieCoefficient: 0.1,
         luminance: 1.0,
-        angle: 0.06,
+        angle: 0.17,
       };
 
       var gui = new dat.GUI({load: JSON});
@@ -82,15 +82,7 @@ and after all that I think i finally rested well
       sunFolder.add(sunParams, "mieDirectionalG", 0., 6.0).onChange(update);
       sunFolder.add(sunParams, "mieCoefficient", 0., 6.0).onChange(update);
       sunFolder.add(sunParams, "luminance", 0, 3.).onChange(update);
-      sunFolder.add(sunParams, "angle", -Math.PI/2.0, Math.PI).onChange(function () {
-        var f = sunParams.angle;
-        var x = 0.0;
-        var y = Math.sin(f);
-        var z = Math.cos(f);
-        app.setSunPosition(x, y, z);
-        app.update(grassParams);
-        app.draw();
-      });
+      sunFolder.add(sunParams, "angle", -Math.PI/2.0, Math.PI).onChange(updateSunPosition);
       sunFolder.open();
 
       gui.remember(grassParams);
@@ -110,6 +102,7 @@ and after all that I think i finally rested well
       
       app.setup();
       app.update(grassParams);
+      updateSunPosition();
       app.draw();
 
       var stats = new Stats();
@@ -144,6 +137,16 @@ and after all that I think i finally rested well
       }
 
     });
+
+    function updateSunPosition() {
+      var f = sunParams.angle;
+      var x = 0.0;
+      var y = Math.sin(f);
+      var z = Math.cos(f);
+      app.setSunPosition(x, y, z);
+      app.update(grassParams);
+      app.draw();
+    }
 
     function update() {
       // app.setPhong(grassParams);

@@ -8,6 +8,31 @@ export class SunnySky {
     this.sky = new THREE.Group();
     this.sky.add(new THREE.Mesh(this.geo, this.mat));
 
+    this.ambientLight = new THREE.AmbientLight(0xCCCCCC);
+
+    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    this.directionalLight.position.set(0, 0, -1);
+    this.directionalLight.lookAt(new THREE.Vector3(0, 0, 0));
+    this.directionalLight.castShadow = true;
+		this.directionalLight.shadow.camera.near = 1;
+		this.directionalLight.shadow.camera.far = 6000;
+
+    this.pointLight1 = new THREE.PointLight(0xFFFFFF, 2, 900);
+    this.pointLight1.position.set(0, 10, -10);
+    this.pointLight1.lookAt(new THREE.Vector3(0, 0, 0));
+    this.pointLight1.castShadow = true;
+		this.pointLight1.shadow.camera.near = 1;
+		this.pointLight1.shadow.camera.far = 60;
+		this.pointLight1.shadow.mapSize.width = 1000.0;
+		this.pointLight1.shadow.mapSize.height = 1000.0;
+		this.pointLight1.shadow.bias = -0.005;
+
+    /*
+    this.pointLight2 = new THREE.PointLight(0x333333, 2, 800);
+    this.pointLight2.position.set(0, 10, -10);
+    this.pointLight2.lookAt(new THREE.Vector3(0, 0, 0));
+    */
+
     if (simulacrum) {
       this.simulacrum = this.simulacrum(0, 0, 0);
     }
@@ -94,6 +119,17 @@ export class SunnySky {
     this.demoSun.position.x = x;
     this.demoSun.position.y = y;
     this.demoSun.position.z = z;
+
+    let r = 100.0;
+    let [a, b, c] = [r*x, r*y, r*z];
+    this.pointLight1.position.set(a, b, c);
+    this.directionalLight.position.set(a, b, c);
+
+    if (y < 0) {
+      this.pointLight1.color.set(0, 0, 0)
+    } else {
+      this.pointLight1.color.set(0xFFFFFF);
+    }
 
     if (this.simulacrum) {
       let [j, k, l] = [6.0*x, 6.0*y, 6.0*z];

@@ -9,15 +9,13 @@ export class CityBuilder {
   }
 
   // AddBuilding
-  addBuilding(x, z, {width, height, depth}) {
+  addBuilding(x, y, z, {width, height, depth}) {
     let g = new THREE.BoxGeometry(width, height, depth);
     let m = new THREE.MeshPhongMaterial({color: 0xCCCCCC});
     let o = new THREE.Mesh(g, m);
-    o.position.set(x, 0, z);
+    o.castShadow = true;
+    o.receiveShadow = true;
+    o.position.set(x, y+height/2.0, z);
     this.group.add(o);
   }
-}
-
-// ...
-export function Thing() {
 }
