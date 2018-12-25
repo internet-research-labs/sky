@@ -91,6 +91,7 @@ export default class StarfieldApp extends QuentinLike {
     // Sky
     this.sky = this.getSky();
     this.scene.add(this.sky.sky);
+    this.sky.simulacrum.group.position.set(0, 2, 5);
     this.scene.add(this.sky.simulacrum.group);
     this.setTheta(0.0);
 
@@ -217,6 +218,7 @@ export default class StarfieldApp extends QuentinLike {
       let s = 80.0;
       let simplex = new SimplexNoise("whatever");
       return (x, y) => {
+        return 0.0;
         return 4.0*simplex.noise2D(x/s, y/s);
       };
     }());
@@ -307,7 +309,7 @@ export default class StarfieldApp extends QuentinLike {
     f = t/10.;
 
     // ...
-    let [a, b, c] = [0, 5, 0];
+    let [a, b, c] = [0, 2, 0];
 
     // ...
     let theta = f % 2*Math.PI;
