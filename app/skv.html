@@ -66,12 +66,12 @@ and after all that I think i finally rested well
       };
 
       sunParams = {
-        rayleigh: 4.0,
+        rayleigh: 1.5,
         turbidity: 4.9,
         mieDirectionalG: 0.1,
         mieCoefficient: 0.1,
         luminance: 1.0,
-        angle: 0.001,
+        angle: 0.06,
       };
 
       var gui = new dat.GUI({load: JSON});
@@ -88,6 +88,8 @@ and after all that I think i finally rested well
         var y = Math.sin(f);
         var z = Math.cos(f);
         app.setSunPosition(x, y, z);
+        app.update(grassParams);
+        app.draw();
       });
       sunFolder.open();
 
@@ -114,11 +116,13 @@ and after all that I think i finally rested well
       document.getElementById("stats").appendChild(stats.dom);
 
       (function loloop() {
+        /*
         stats.begin();
         app.update(grassParams);
         app.draw();
         stats.end();
         requestAnimationFrame(loloop);
+        */
       }());
 
       window.addEventListener('resize', debounce(100, function (ev) {
@@ -145,6 +149,9 @@ and after all that I think i finally rested well
       // app.setPhong(grassParams);
       // app.setTheta(grassParams.theta);
       app.set(sunParams);
+      app.update(grassParams);
+      app.draw();
+      console.log(">>>");
     }
 
     </script>

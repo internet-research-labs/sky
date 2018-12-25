@@ -95,9 +95,6 @@ export default class StarfieldApp extends QuentinLike {
     this.scene.add(this.sky.simulacrum.group);
     this.setTheta(0.0);
 
-    // Helper setup functions
-    this.setupTrack();
-
     // Add visible components
 
     let start = getElapsedTime();
@@ -117,12 +114,6 @@ export default class StarfieldApp extends QuentinLike {
     // this.addObelisk(WEST, 0x00FF00);
 
     // console.log("Create grassy field time:", getElapsedTime()-start);
-  }
-
-  // Setup a camera track... but in this case actually do nothing
-  setupTrack() {
-    this.camera.position.set(0, 30, 0);
-    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
   }
 
 
@@ -215,11 +206,11 @@ export default class StarfieldApp extends QuentinLike {
     });
 
     let _abc = (function () {
-      let s = 80.0;
+      let a = 2.0;
+      let s = 40.0;
       let simplex = new SimplexNoise("whatever");
       return (x, y) => {
-        return 0.0;
-        return 4.0*simplex.noise2D(x/s, y/s);
+        return a*simplex.noise2D(x/s, y/s);
       };
     }());
 
@@ -264,13 +255,6 @@ export default class StarfieldApp extends QuentinLike {
     let surface = new TriangleSurface(this.floor.f, 1, 90, 90);
 
     this.scene.add(new THREE.Mesh(surface.build(), floorMat));
-    let geo = new THREE.BoxGeometry(1, 5, 1);
-
-    this.mirrorBox = new THREE.Mesh(geo, floorMat);
-    // this.scene.add(this.mirrorBox);
-
-    // 
-    // this.addGrassyField();
   }
 
   addObelisk([x, z], c) {
@@ -284,24 +268,6 @@ export default class StarfieldApp extends QuentinLike {
     this.scene.add(mesh);
   }
 
-  /**
-   * What is this?
-   */
-  addGrid() {
-    let mat = new THREE.LineBasicMaterial({color: 0x999999});
-    let VALS = 100;
-    for (let i=-VALS; i <= VALS; i++) {
-      let geo = new THREE.Geometry();
-      geo.vertices.push(new THREE.Vector3(i, 0, -80));
-      geo.vertices.push(new THREE.Vector3(i, 0, 80));
-      this.scene.add(new THREE.Line(geo, mat));
-      geo = new THREE.Geometry();
-      geo.vertices.push(new THREE.Vector3(-80, 0, i));
-      geo.vertices.push(new THREE.Vector3(80, 0, i));
-      this.scene.add(new THREE.Line(geo, mat));
-    }
-  }
-
   update(params) {
     let t = +new Date() / 200.0 / 1.0;
     let f = Math.PI/4.0;
@@ -309,25 +275,12 @@ export default class StarfieldApp extends QuentinLike {
     f = t/10.;
 
     // ...
-    let [a, b, c] = [0, 2, 0];
-
-    // ...
-    let theta = f % 2*Math.PI;
-    // this.sky.sky.setRotationFromAxisAngle(this.skyAxis, theta);
-
-    // ...
+    let [a, b, c] = [0, 9, 0];
     this.camera.position.set(a, b, c);
-    this.camera.lookAt(a, b, c+10.0);
+    this.camera.lookAt(a, 0, c+100.0);
 
     // Move skybox around camera position
-    this.sky.sky.position.set(
-      this.camera.position.x,
-      this.camera.position.y,
-      this.camera.position.z,
-    );
-
-    // this.cubeCamera.position.copy(this.mirrorBox.position);
-    // this.cubeCamera.update(this.renderer, this.scene);
+    this.sky.sky.position.set(a, b, c);
   }
 
   setupCamera() {
