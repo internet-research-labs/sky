@@ -1,11 +1,12 @@
 import App from './app-utils/App.js';
 import QuentinLike from './app-utils/Quentin.js';
 import {add, cross, sub, normalize, scale} from './math3.js';
-import {getElapsedTime} from './utils.js';
+import {random, getElapsedTime} from './utils.js';
 import * as THREE from 'THREE';
 
 import {sky, StarrySky} from './obj/StarrySky.js';
 import {SunnySky} from './obj/SunnySky.js';
+import {CityBuilder} from './obj/city.js';
 
 import SimplexNoise from 'simplex-noise';
 
@@ -101,6 +102,7 @@ export default class StarfieldApp extends QuentinLike {
     this.fieldMesh = {}
 
     this.addFloor();
+    this.addSkyline();
 
     // Add obelisks
     // console.log("Adding obelisks");
@@ -114,6 +116,29 @@ export default class StarfieldApp extends QuentinLike {
     // this.addObelisk(WEST, 0x00FF00);
 
     // console.log("Create grassy field time:", getElapsedTime()-start);
+  }
+
+  addSkyline() {
+    let builder = new CityBuilder();
+    const WIDTH = 1.0;
+    const PAD = 0.2;
+
+    for (let j=0; j < 4; j++) {
+      for (let i=-20; i < 20; i++) {
+        if (i > -3 && i < 3) {
+          continue;
+        }
+        let x = i*(WIDTH+PAD);
+        let z = 60.0+j*(WIDTH+PAD);
+        let h = random(4.0, 10.0);
+        builder.addBuilding(x, z, {
+          width: WIDTH,
+          height: h,
+          depth: WIDTH,
+        });
+      }
+    }
+    this.scene.add(builder.group);
   }
 
 
@@ -244,7 +269,6 @@ export default class StarfieldApp extends QuentinLike {
 
     let floorMat = new THREE.MeshPhongMaterial({
       color: 0xCCCCCC,
-      wireframe: true,
       // envMap: this.cubeCamera.renderTarget,
       reflectivity: 0.95,
       side: THREE.BackSide,
