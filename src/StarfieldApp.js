@@ -131,8 +131,8 @@ export default class StarfieldApp extends QuentinLike {
           continue;
         }
         let x = i*(WIDTH+PAD);
-        let y = 0.0;
         let z = 60.0+j*(WIDTH+PAD);
+        let y = this.floor.f(x, z);
         let h = random(2.0, 8.0);
 
         builder.addBuilding(
@@ -281,6 +281,7 @@ export default class StarfieldApp extends QuentinLike {
       side: THREE.DoubleSide,
     });
 
+    /*
     let surface = new THREE.PlaneGeometry(100, 100, 100);
     let obj = new THREE.Mesh(surface, mat);
     obj.position.set(0, 0, 40);
@@ -289,9 +290,10 @@ export default class StarfieldApp extends QuentinLike {
     this.scene.add(obj);
     //*/
 
-    /*
     let surface = new TriangleSurface(this.floor.f, 1, 90, 90);
-    this.scene.add(new THREE.Mesh(surface.build(), mat));
+    let o = new THREE.Mesh(surface.build(), mat);
+    o.receiveShadow = true;
+    this.scene.add(o);
     //*/
   }
 
