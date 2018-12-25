@@ -19,7 +19,6 @@ export class SunnySky {
 
     let objects = {};
 
-
     console.log("[SIMULACRUM] Added");
     let g = new THREE.Group();
 

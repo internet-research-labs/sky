@@ -304,10 +304,7 @@ export default class StarfieldApp extends QuentinLike {
     let t = +new Date() / 200.0 / 1.0;
     let f = Math.PI/4.0;
     let r = 90;
-    f = t/10000.0;
-    let x = r*Math.cos(f);
-    let z = r*Math.sin(f);
-    let y =  params.y;
+    f = t/10.;
 
     // ...
     let [a, b, c] = [0, 5, 0];
@@ -318,13 +315,7 @@ export default class StarfieldApp extends QuentinLike {
 
     // ...
     this.camera.position.set(a, b, c);
-    this.camera.lookAt(a+10.0, b, c);
-
-
-    let pos = SOUTH.clone();
-    pos.multiplyScalar(20.0);
-    pos.y = y;
-    // this.camera.lookAt(pos);
+    this.camera.lookAt(a, b, c+10.0);
 
     // Move skybox around camera position
     this.sky.sky.position.set(
@@ -357,6 +348,10 @@ export default class StarfieldApp extends QuentinLike {
 
   set(p) {
     this.sky.set(p);
+  }
+
+  setSunPosition(x, y, z) {
+    this.sky.setSunPosition(x, y, z);
   }
 
   resize(width, height) {
