@@ -10,19 +10,19 @@ export class SunnySky {
 
     this.ambientLight = new THREE.AmbientLight(0xCCCCCC);
 
-    this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    this.directionalLight = new THREE.DirectionalLight(0xCCCCCC, 0.9);
     this.directionalLight.position.set(0, 0, -1);
     this.directionalLight.lookAt(new THREE.Vector3(0, 0, 0));
     this.directionalLight.castShadow = true;
 		this.directionalLight.shadow.camera.near = 1;
 		this.directionalLight.shadow.camera.far = 9000;
 
-    this.pointLight1 = new THREE.PointLight(0xFFFFFF, 2, 900);
+    this.pointLight1 = new THREE.PointLight(0xFFFFFF, 8.0, 90);
     this.pointLight1.position.set(0, 10, -10);
     this.pointLight1.lookAt(new THREE.Vector3(0, 0, 0));
     this.pointLight1.castShadow = true;
 		this.pointLight1.shadow.camera.near = 1;
-		this.pointLight1.shadow.camera.far = 200;
+		this.pointLight1.shadow.camera.far = 1000;
 		this.pointLight1.shadow.mapSize.width = 1000.0;
 		this.pointLight1.shadow.mapSize.height = 1000.0;
 		this.pointLight1.shadow.bias = -0.005;
@@ -123,7 +123,11 @@ export class SunnySky {
     let r = 100.0;
     let [a, b, c] = [r*x, r*y, r*z];
     this.pointLight1.position.set(a, b, c);
-    this.directionalLight.position.set(a, b, c);
+    this.directionalLight.position.set(x, y, z);
+    this.directionalLight.position.multiplyScalar(r);
+    this.directionalLight.lookAt(0, 0.0, 0);
+
+    console.log(this.directionalLight.shadow.map);
 
     if (y < 0) {
       this.pointLight1.color.set(0, 0, 0)
@@ -140,7 +144,6 @@ export class SunnySky {
   }
 
   set(params) {
-    console.log(params);
     this.mat.uniforms.rayleigh.value = params.rayleigh || this.mat.uniforms.rayleigh.value;
     this.mat.uniforms.turbidity.value = params.turbidity || this.mat.uniforms.turbidity.value;
     this.mat.uniforms.luminance.value = params.luminance || this.mat.uniforms.luminance.value;

@@ -74,7 +74,13 @@ and after all that I think i finally rested well
         angle: 0.17,
       };
 
+      shadowParams = {
+        shadowMapWidth: 512.0,
+        shadowMapHeight: 512.0,
+      };
+
       var gui = new dat.GUI({load: JSON});
+      gui.remember(sunParams);
 
       var sunFolder = gui.addFolder("SUN SUN SUN");
       sunFolder.add(sunParams, "rayleigh", 0., 6.0).onChange(update);
@@ -83,10 +89,13 @@ and after all that I think i finally rested well
       sunFolder.add(sunParams, "mieCoefficient", 0., 6.0).onChange(update);
       sunFolder.add(sunParams, "luminance", 0, 3.).onChange(update);
       sunFolder.add(sunParams, "angle", -Math.PI/2.0, Math.PI).onChange(updateSunPosition);
+
+      var shadowFolder = gui.addFolder("SHADOW SHADOW SHADOW");
+      shadowFolder.add(shadowParams, "shadowMapWidth", 0., 6000.0).onChange(update);
+      shadowFolder.add(shadowParams, "shadowMapHeight", 0., 6000.0).onChange(update);
+
       sunFolder.open();
-
-      gui.remember(grassParams);
-
+      shadowFolder.open();
 
       return grassParams;
     }
@@ -144,17 +153,14 @@ and after all that I think i finally rested well
       var y = Math.sin(f);
       var z = Math.cos(f);
       app.setSunPosition(x, y, z);
-      app.update(grassParams);
-      app.draw();
+      update();
     }
 
     function update() {
-      // app.setPhong(grassParams);
-      // app.setTheta(grassParams.theta);
       app.set(sunParams);
       app.update(grassParams);
+      app.setRendererParams(shadowParams);
       app.draw();
-      console.log(">>>");
     }
 
     </script>

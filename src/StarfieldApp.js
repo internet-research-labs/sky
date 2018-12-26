@@ -55,7 +55,7 @@ export default class StarfieldApp extends QuentinLike {
       canvas: this.el,
     });
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.BasicShadowMap;
+    // this.renderer.shadowMap.type = THREE.BasicShadowMap;
 
     /*
     this.renderer.shadowCameraNear = 3;
@@ -88,14 +88,14 @@ export default class StarfieldApp extends QuentinLike {
     this.sky = this.getSky();
     this.scene.add(this.sky.sky);
     this.sky.simulacrum.group.position.set(0, 2, 5);
-    this.scene.add(this.sky.simulacrum.group);
+    // this.scene.add(this.sky.simulacrum.group);
 
     this.scene.add(this.sky.ambientLight);
-    // this.scene.add(this.sky.directionalLight);
+    this.scene.add(this.sky.directionalLight);
     this.scene.add(this.sky.pointLight1);
     // this.scene.add(this.sky.pointLight2);
 
-    let helper = new THREE.CameraHelper(this.sky.directionalLight.shadow.camera);
+    let helper = new THREE.DirectionalLightHelper(this.sky.directionalLight, 0.3);
     this.scene.add(helper);
 
     // Add visible components
@@ -131,7 +131,7 @@ export default class StarfieldApp extends QuentinLike {
           continue;
         }
         let x = i*(WIDTH+PAD);
-        let z = 60.0+j*(WIDTH+PAD);
+        let z = 50.0+j*(WIDTH+PAD);
         let y = this.floor.f(x, z);
         let h = random(2.0, 8.0);
 
@@ -145,6 +145,21 @@ export default class StarfieldApp extends QuentinLike {
         );
       }
     }
+    let w = 0.3;
+    let m = new THREE.Mesh(
+      new THREE.BoxGeometry(w, w, w),
+      new THREE.MeshBasicMaterial({color: 0xFF0000}),
+    );
+    m.position.set(0, 1.0, 0);
+    m.castShadow = true;
+
+    let n = new THREE.Mesh(
+      new THREE.BoxGeometry(w, w, w),
+      new THREE.MeshPhongMaterial({color: 0xFF0000}),
+    );
+    n.receiveShadow = true;
+    this.scene.add(m);
+    this.scene.add(n);
     this.scene.add(builder.group);
   }
 
@@ -238,7 +253,7 @@ export default class StarfieldApp extends QuentinLike {
     });
 
     let _abc = (function () {
-      let a = 2.0;
+      let a = 3.0;
       let s = 40.0;
       let simplex = new SimplexNoise("whatever");
       return (x, y) => {
@@ -315,9 +330,9 @@ export default class StarfieldApp extends QuentinLike {
     f = t/10.;
 
     // ...
-    let [a, b, c] = [0, 9, 0];
+    let [a, b, c] = [0, 10, -10];
     this.camera.position.set(a, b, c);
-    this.camera.lookAt(a, 0, c+100.0);
+    this.camera.lookAt(a, 0, c+100);
 
     // Move skybox around camera position
     this.sky.sky.position.set(a, b, c);
@@ -339,6 +354,9 @@ export default class StarfieldApp extends QuentinLike {
     this.setupCamera();
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(this.app.width, this.app.height);
+  }
+
+  setRendererParams(p) {
   }
 
   set(p) {
