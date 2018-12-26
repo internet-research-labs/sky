@@ -15,14 +15,14 @@ export class SunnySky {
     this.directionalLight.lookAt(new THREE.Vector3(0, 0, 0));
     this.directionalLight.castShadow = true;
 		this.directionalLight.shadow.camera.near = 1;
-		this.directionalLight.shadow.camera.far = 6000;
+		this.directionalLight.shadow.camera.far = 9000;
 
     this.pointLight1 = new THREE.PointLight(0xFFFFFF, 2, 900);
     this.pointLight1.position.set(0, 10, -10);
     this.pointLight1.lookAt(new THREE.Vector3(0, 0, 0));
     this.pointLight1.castShadow = true;
 		this.pointLight1.shadow.camera.near = 1;
-		this.pointLight1.shadow.camera.far = 60;
+		this.pointLight1.shadow.camera.far = 200;
 		this.pointLight1.shadow.mapSize.width = 1000.0;
 		this.pointLight1.shadow.mapSize.height = 1000.0;
 		this.pointLight1.shadow.bias = -0.005;
