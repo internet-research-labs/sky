@@ -23,8 +23,8 @@ export class SunnySky {
     this.pointLight1.castShadow = true;
 		this.pointLight1.shadow.camera.near = 1;
 		this.pointLight1.shadow.camera.far = 200;
-		this.pointLight1.shadow.mapSize.width = 1000.0;
-		this.pointLight1.shadow.mapSize.height = 1000.0;
+		this.pointLight1.shadow.mapSize.width = 4000.0;
+		this.pointLight1.shadow.mapSize.height = 4000.0;
 		this.pointLight1.shadow.bias = -0.005;
 
     /*
